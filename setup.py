@@ -20,7 +20,6 @@ install_requires = [
     # increase the minimum version though, to one that supports django
     # 1.6.
     'django_polymorphic==0.5.1',
-    'South',
     'django-pyscss',
     'six',
     'markdown',
