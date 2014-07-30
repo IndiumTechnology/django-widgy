@@ -3,19 +3,10 @@ from django.utils.translation import (
     ugettext_lazy as _, ugettext, get_language, get_language_info
 )
 from django.conf import settings
-<<<<<<< HEAD
- 
-=======
-
->>>>>>> 237843e... Added Copyright to license for covering code of Indiu Technology Oy and cleaned up some old code.
 from widgy.models import Content
 from widgy.contrib.page_builder.models import Layout
 from widgy.models.mixins import TabbedContainer, StrictDefaultChildrenMixin
 from widgy import register
-<<<<<<< HEAD
-
-=======
->>>>>>> 237843e... Added Copyright to license for covering code of Indiu Technology Oy and cleaned up some old code.
 
 class I18NChild(models.Model):
     """
