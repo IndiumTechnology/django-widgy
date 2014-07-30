@@ -115,7 +115,7 @@
 {% endblock %}
 
 {% block extra_js %}
-    {% if self.get_children.0|find_node_of_type:"carousel" %}
+    {% if self.get_children.0|find_node_of_type:"carousel" or self.get_children.1|find_node_of_type:"carousel" %}
 	<script type="text/javascript" src="/static/js/jquery.jcarousel.min.js" ></script>
     {% endif %}
 {% endblock %}
