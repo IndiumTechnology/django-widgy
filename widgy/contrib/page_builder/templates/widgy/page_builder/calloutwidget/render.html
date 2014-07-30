@@ -1,7 +1,7 @@
 {% load widgy_tags %}
 
 {% if self.callout %}
-<div class="callout">
+<div class="callout{% if self.container_classes %} {{ self.container_classes }} {% endif %}">
   {% render_root self.callout 'root_node' %}
 </div>
 {% endif %}

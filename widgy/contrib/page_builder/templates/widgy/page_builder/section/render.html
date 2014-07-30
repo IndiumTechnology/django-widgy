@@ -1,5 +1,5 @@
 {% load widgy_tags %}
-
+<div class="{% if self.container_classes %} {{ self.container_classes }} {% endif %}">
 {% if section_behavior == 'tabs' %}
   <p class="title">{{ self.title }}:</p>
 
@@ -16,3 +16,4 @@
     </div>
   </details>
 {% endif %}
+</div>

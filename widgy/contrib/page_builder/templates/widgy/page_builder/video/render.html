@@ -1,1 +1,3 @@
-<iframe class="page_builder video" src="{{ self.video.embed_url }}" frameborder="0" seamless allowfullscreen></iframe>
+<div class="video-wrapper {% if self.container_classes %} {{ self.container_classes }} {% endif %}">
+	<iframe class="page_builder video" src="{{ self.video.embed_url }}" frameborder="0" seamless allowfullscreen></iframe>
+</div>

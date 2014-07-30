@@ -1,3 +1,5 @@
 {% load widgy_tags %}
-
+{% if self.container_classes %}<div class="{{ self.container_classes }}">{% endif %}
 {{ self.content|markdown }}
+{% if self.container_classes %}</div>{% endif %}
+

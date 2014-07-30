@@ -1,5 +1,5 @@
 {% load argonauts i18n %}{{ field.errors }}
-<div id="{{ field.html_name }}_container" class="{{field.name}} {{field.html_name}}{% if field.field.required %} required{% endif %}{% if field.errors %} error{% endif %} formField">
+<div id="{{ field.html_name }}_container" class="{{field.name}} {{field.html_name}}{% if field.field.required %} required{% endif %}{% if field.errors %} error{% endif %} formField{% if self.container_classes %} {{ self.container_classes }} {% endif %}">
   <label for="{{ field.id_for_label }}">{% trans "Uncaptcha:" %}</label>
   <input type="text" id="{{ field.id_for_label }}" name="{{ field.html_name }}">
   <div class="help_text">{% blocktrans %}Please copy "{{ csrf_token }}" into the field labeled "Uncaptcha".{% endblocktrans %}</div>

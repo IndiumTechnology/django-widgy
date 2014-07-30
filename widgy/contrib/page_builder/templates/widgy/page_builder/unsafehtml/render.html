@@ -1,1 +1,3 @@
-{{ self.content|safe }}
+<div class="{% if self.container_classes %} {{ self.container_classes }} {% endif %}">
+	{{ self.content|safe }}
+</div>

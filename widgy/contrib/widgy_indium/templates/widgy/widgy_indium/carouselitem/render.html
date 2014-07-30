@@ -1,0 +1,15 @@
+{% load compress widgy_tags %}
+<li class="carousel-child" style="
+			{% if self.background_image %}
+				background-image:url('{{ self.background_image.url }}');
+				background-size: cover;
+				background-position: center center;
+			{% endif %}
+			{% if self.background_color %}
+				background-color:{{ self.background_color }};
+			{% endif %}">
+	{% for child in self.get_children %}
+		{% render child %}
+	{% endfor %}
+</li>
+	

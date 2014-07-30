@@ -1,0 +1,101 @@
+{% load compress indium_math indium widgy_tags %}
+{% with list_length=self.get_children|length|add:1 ident=self.id  %}
+{% compress css %}
+<style>
+.jcarousel-{{ ident }} .carousel-child {
+	width:{{ 100|div:list_length }}% !important;
+}
+</style>
+{% endcompress %}
+
+{% compress js %}
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+
+        var jcarousel = $('.jcarousel-{{ ident }}');
+
+	$('.jcarousel-{{ ident }}').on('jcarousel:targetout', 'li', function(event, carousel) {
+	    // "this" refers to the item element
+	    // "carousel" is the jCarousel instance
+//	    jQuery.removeData(this);
+	});
+
+        $('.jcarousel-{{ ident }}').jcarousel({
+                wrap: '{{ self.wrap_mode }}',
+		animation: {
+        		duration: {{ self.animation_duration }},
+        		easing:   '{{ self.animation_easing }}',
+        		complete: function() {
+        		}
+		},
+		vertical: {% if self.orientation %}true{% else %}false{% endif %}/*,
+		transitions: Modernizr.csstransitions ? {
+        		transforms:   Modernizr.csstransforms,
+        		transforms3d: Modernizr.csstransforms3d,
+        		easing:       '{% if self.animation_easing == "swing" %}ease{% else %}{{ self.animation_easing }}{% endif %}'
+    		} : false*/
+            });
+
+	{% if self.auto_scroll %}
+	$('.jcarousel-{{ ident }}').jcarouselAutoscroll({
+    		interval: {{ self.delay  }}
+	});
+	{% if self.pause_scroll_on_hover %}
+		$('.jcarousel-{{ ident }}').hover(function() {
+			$('.jcarousel-{{ ident }}').jcarouselAutoscroll('stop');
+		}, function() {
+			$('.jcarousel-{{ ident }}').jcarouselAutoscroll('start');
+		});	
+	{% endif %} 
+	{% endif %}	
+
+	{% if self.controls %}
+        $('.jcarousel-control-prev-{{ ident }}')
+            .jcarouselControl({
+                target: '-=1'
+            });
+
+        $('.jcarousel-control-next-{{ ident }}')
+            .jcarouselControl({
+                target: '+=1'
+            });
+	{% endif %}
+
+	{% if self.pagination %}
+        $('.jcarousel-pagination-{{ ident }}')
+            .on('jcarouselpagination:active', 'a', function() {
+                $(this).addClass('active');
+            })
+            .on('jcarouselpagination:inactive', 'a', function() {
+                $(this).removeClass('active');
+            })
+            .on('click', function(e) {
+                e.preventDefault();
+            })
+            .jcarouselPagination({
+                perPage: 1,
+                item: function(page) {
+                    return '<a href="#' + page + '">' + page + '</a>';
+                }
+            });
+	{% endif %}
+});
+</script>
+{% endcompress %}
+<div class="jcarousel-wrapper jcarousel-wrapper-{{ ident }} {% if self.container_classes %} {{ self.container_classes }} {% endif %} clearfix">
+	<div class="jcarousel jcarousel-{{ ident }}" data-jcarousel="true">
+	    <ul style="width:{{ list_length|div:self.visible_slides_at_time|mul:100|floatformat:"0" }}%;">
+		{% for child in self.get_children %}
+			{% render child %}
+		{% endfor %}
+	   </ul>
+	</div>
+	{% if self.controls %}
+		<a href="#" class="jcarousel-control-prev jcarousel-control-prev-{{ ident }}  inactive" data-jcarouselcontrol="true">‹</a>
+		<a href="#" class="jcarousel-control-next jcarousel-control-next-{{ ident }}" data-jcarouselcontrol="true">›</a>
+	{% endif %}
+	{% if self.pagination %}
+		<p class="jcarousel-pagination jcarousel-pagination-{{ ident }}" data-jcarouselpagination="true"></p>
+	{% endif %}
+</div>
+{% endwith %}

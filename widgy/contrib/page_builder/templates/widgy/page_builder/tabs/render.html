@@ -1,6 +1,6 @@
 {% load widgy_tags %}
 
-<div class="tabify">
+<div class="tabify{% if self.container_classes %} {{ self.container_classes }} {% endif %}">
   <ul class="tabs">
     {% for tab in self.get_children %}
       <li><a href="#{{ tab|slugify }}"{% if forloop.first %} class="active"{% endif %}>{{ tab }}</a></li>

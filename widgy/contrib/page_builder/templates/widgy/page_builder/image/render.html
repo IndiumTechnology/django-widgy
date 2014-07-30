@@ -1,5 +1,6 @@
-{% load thumbnail_libs %}
+{% load thumbnail_libs indium %}
 
-{% sorl_thumbnail self.image.file.name "500x500" upscale=False as im %}
-  <img src="{{ im.url }}" alt="{{ self.image.label }}">
-{% endthumbnail %}
+{% if self.container_classes  %}<div class="{{ self.container_classes }}"> {% endif %}
+{% easy_thumbnail self.image.file self.image_width|add_str:"x"|add_str:self.image_height upscale=True crop=self.crop  as im %}
+  <img src="{{ im.url }}" alt="{{ self.image.label }}" width="{{ im.width }}" height="{{ im.height }}" />
+{% if self.container_classes %}</div>{% endif %}

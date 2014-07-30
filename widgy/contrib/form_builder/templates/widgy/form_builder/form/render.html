@@ -1,5 +1,6 @@
 {% load widgy_tags %}
 
+{% if self.container_classes %}<div class="{{ self.container_classes }}"> {% endif %}
 {% if success %}
   {% render self.children.meta.children.message %}
 {% else %}
@@ -8,3 +9,4 @@
   {% render self.children.fields %}
 </form>
 {% endif %}
+{% if self.container_classes %}</div> {% endif %}

@@ -1,3 +1,3 @@
-<div class="htmlOutput">
+<div class="htmlOutput{% if self.container_classes %} {{ self.container_classes }} {% endif %}">
   {{ self.content|safe }}
 </div>

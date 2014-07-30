@@ -1,5 +1,5 @@
 {% load widgy_tags %}
-<{{ self.tag_name }}>
+<{{ self.tag_name }} class="{% if self.container_classes %}{{ self.container_classes }}{% endif %}">
   {% for child in self.get_children %}
   {% render child %}
   {% endfor %}

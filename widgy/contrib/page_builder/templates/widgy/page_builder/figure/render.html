@@ -1,5 +1,5 @@
 {% load widgy_tags %}
-<figure class="page_builder figure {{ self.position }}">
+<figure class="page_builder figure {{ self.position }}{% if self.container_classes %} {{ self.container_classes }} {% endif %}">
   {% for child in self.get_children %}
     {% render child %}
   {% endfor %}
