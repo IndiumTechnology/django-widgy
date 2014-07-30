@@ -566,6 +566,42 @@ class Content(models.Model):
         form_kwargs.setdefault('instance', self)
         return form_class(**form_kwargs)
 
+    def get_form_class(self, request):	 
+	exc = ""
+	if hasattr(self, 'exclude'):
+	    exc = self.exclude
+
+	defaults = {
+	    "form": self.form,
+	    "formfield_callback": partial(self.formfield_for_dbfield, request=request),
+	    "exclude": exc,
+	}
+
+	form_class = modelform_factory(self.__class__, **defaults)
+	# Rather than make everybody subclass a special form, add the
+	# required_css_class and error_css_class manually here, because we know
+	# we need it in the widgy editor.  If need be, we can make the actual
+	# classes configurable somehow later.
+	if not hasattr(form_class, 'required_css_class'):
+	    form_class.required_css_class = 'required'
+	if not hasattr(form_class, 'error_css_class'):
+	    form_class.error_css_class = 'error'	
+	if hasattr(self, 'collapsed'):
+	    form_class.collapsed = self.collapsed
+
+	return form_class
+
+    def get_form(self, request, **form_kwargs):
+	self.exclude = []
+	if hasattr(self._meta, 'permissions'):
+	    for perm in self._meta.permissions:	
+		if not request.user.has_perm('widgy.page_builder.'+perm[0]):
+		    self.exclude.append('container_classes')
+	form_class = self.get_form_class(request)
+	form_kwargs.setdefault('instance', self)
+	return form_class(**form_kwargs)
+
+
     def valid_parent_of(self, cls, obj=None):
         """
         Given a content class, can it be _added_ as our child?

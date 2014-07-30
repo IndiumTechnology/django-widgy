@@ -19,6 +19,17 @@ from widgy.signals import pre_delete_widget
 from widgy.utils import build_url, SelectRelatedManager
 import widgy
 
+#from widgy.contrib.widgy_indium.models import CssContainerClasses
+
+
+class CssContainerClasses(models.Model):
+	class Meta:
+		abstract = True			
+		app_label = "widgy_indium"
+
+
+	container_classes = models.CharField(max_length=255, blank=True, null=True, help_text=_("A list of CSS classes, separated by space."))
+
 
 class Layout(StrictDefaultChildrenMixin, Content):
     """
@@ -35,6 +46,8 @@ class Layout(StrictDefaultChildrenMixin, Content):
         return False
 
 
+
+
 class Bucket(Content):
     draggable = False
     deletable = False
@@ -42,6 +55,7 @@ class Bucket(Content):
 
     class Meta:
         abstract = True
+
 
 
 @widgy.register
@@ -89,8 +103,10 @@ class DefaultLayout(Layout):
     ]
 
 
+
+
 @widgy.register
-class Markdown(Content):
+class Markdown(Content, CssContainerClasses):
     content = MarkdownField(blank=True, verbose_name=_('content'))
     rendered = models.TextField(editable=False)
 
@@ -100,6 +116,9 @@ class Markdown(Content):
     class Meta:
         verbose_name = _('markdown')
         verbose_name_plural = _('markdowns')
+	permissions = (
+		("can_add_markdown_css_classes", "Can add Markdown CSS classes"),
+	)
 
 
 class HtmlForm(forms.ModelForm):
@@ -107,7 +126,7 @@ class HtmlForm(forms.ModelForm):
 
 
 @widgy.register
-class Html(Content):
+class Html(Content, CssContainerClasses):
     content = models.TextField(null=False, default='')
 
     form = HtmlForm
@@ -119,10 +138,13 @@ class Html(Content):
     class Meta:
         verbose_name = _('HTML')
         verbose_name_plural = _('HTML editors')
+	permissions = (
+		("can_add_html_css_classes", "Can add HTML CSS classes"),
+	)
 
 
 @widgy.register
-class UnsafeHtml(Content):
+class UnsafeHtml(Content, CssContainerClasses):
     content = models.TextField(null=False, default='')
 
     editable = True
@@ -133,10 +155,13 @@ class UnsafeHtml(Content):
     class Meta:
         verbose_name = _('unsafe HTML')
         verbose_name_plural = _('unsafe HTML editors')
+	permissions = (
+		("can_add_unsafehtml_css_classes", "Can add UnsafeHTML CSS classes"),
+	)
 
 
 @widgy.register
-class CalloutBucket(Bucket):
+class CalloutBucket(Bucket, CssContainerClasses):
     @classmethod
     def valid_child_of(cls, parent, obj=None):
         return False
@@ -147,6 +172,9 @@ class CalloutBucket(Bucket):
     class Meta:
         verbose_name = _('callout bucket')
         verbose_name_plural = _('callout buckets')
+	permissions = (
+		("can_add_callout_bucket_css_classes", "Can add Callout Bucket CSS classes"),
+	)
 
 
 @python_2_unicode_compatible
@@ -171,7 +199,7 @@ class Callout(models.Model):
 
 @widgy.register
 @python_2_unicode_compatible
-class CalloutWidget(StrDisplayNameMixin, Content):
+class CalloutWidget(StrDisplayNameMixin, Content, CssContainerClasses):
     callout = models.ForeignKey(Callout, null=True, blank=True,
                                 on_delete=models.PROTECT)
 
@@ -184,6 +212,9 @@ class CalloutWidget(StrDisplayNameMixin, Content):
     class Meta:
         verbose_name = _('callout widget')
         verbose_name_plural = _('callout widgets')
+	permissions = (
+		("can_add_calloutwidget_css_classes", "Can add CalloutWidget CSS classes"),
+	)
 
     def __str__(self):
         if self.callout:
@@ -196,7 +227,7 @@ class CalloutWidget(StrDisplayNameMixin, Content):
 
 
 @widgy.register
-class Accordion(Bucket):
+class Accordion(Bucket, CssContainerClasses):
     draggable = True
     deletable = True
     tooltip = _("Accordions are a good way to separate sections of content. A"
@@ -209,6 +240,9 @@ class Accordion(Bucket):
     class Meta:
         verbose_name = _('accordion')
         verbose_name_plural = _('accordions')
+	permissions = (
+		("can_add_accordion_css_classes", "Can add Accordion CSS classes"),
+	)
 
 
 @widgy.register
@@ -221,11 +255,14 @@ class Tabs(TabbedContainer, Accordion):
         proxy = True
         verbose_name = _('tabs')
         verbose_name_plural = _('tabs')
+	permissions = (
+		("can_add_tabs_css_classes", "Can add Tabs CSS classes"),
+	)
 
 
 @widgy.register
 @python_2_unicode_compatible
-class Section(StrDisplayNameMixin, Content):
+class Section(StrDisplayNameMixin, Content, CssContainerClasses):
     title = models.CharField(max_length=1023, verbose_name=_('title'),
                              help_text=_("Use a unique title for each section."))
 
@@ -241,22 +278,34 @@ class Section(StrDisplayNameMixin, Content):
     class Meta:
         verbose_name = _('section')
         verbose_name_plural = _('sections')
+	permissions = (
+		("can_add_section_css_classes", "Can add Section CSS classes"),
+	)
 
     def __str__(self):
         return self.title
 
 
 @widgy.register
-class Image(Content):
+class Image(Content, CssContainerClasses):
     editable = True
 
     image = ImageField(verbose_name=_('image'))
 
     objects = SelectRelatedManager(select_related=['image'])
 
+    image_width  = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('image width'))
+    image_height = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('image height'))
+
+    crop = models.BooleanField(default=False, verbose_name=_('crop')) 
+
+
     class Meta:
         verbose_name = _('image')
         verbose_name_plural = _('images')
+	permissions = (
+		("can_add_image_css_classes", "Can add Image CSS classes"),
+	)
 
 
 class TableElement(Content):
@@ -279,7 +328,7 @@ class TableElement(Content):
 
 
 @widgy.register
-class TableRow(TableElement):
+class TableRow(TableElement, CssContainerClasses):
     tag_name = 'tr'
 
     tooltip = _("Add a row to your table.")
@@ -298,10 +347,13 @@ class TableRow(TableElement):
     class Meta:
         verbose_name = _('row')
         verbose_name_plural = _('rows')
+	permissions = (
+		("can_add_tablerow_css_classes", "Can add TableRow CSS classes"),
+	)
 
 
 @widgy.register
-class TableHeaderData(TableElement):
+class TableHeaderData(TableElement, CssContainerClasses):
     tag_name = 'th'
 
     accepting_children = True
@@ -311,6 +363,9 @@ class TableHeaderData(TableElement):
 
     class Meta:
         verbose_name = 'column'
+	permissions = (
+		("can_add_column_css_classes", "Can add Column CSS classes"),
+	)
 
     @classmethod
     def valid_child_of(cls, parent, obj=None):
@@ -362,7 +417,7 @@ def delete_column(sender, instance, raw, **kwargs):
 
 
 @widgy.register
-class TableData(TableElement):
+class TableData(TableElement, CssContainerClasses):
     tag_name = 'td'
 
     accepting_children = True
@@ -381,10 +436,13 @@ class TableData(TableElement):
     class Meta:
         verbose_name = _('cell')
         verbose_name_plural = _('cells')
+	permissions = (
+		("can_add_cell_css_classes", "Can add Cell CSS classes"),
+	)
 
 
 @widgy.register
-class TableHeader(TableElement):
+class TableHeader(TableElement, CssContainerClasses):
     draggable = False
     deletable = False
     component_name = 'tableheader'
@@ -405,10 +463,13 @@ class TableHeader(TableElement):
     class Meta:
         verbose_name = _('table header')
         verbose_name_plural = _('table headers')
+	permissions = (
+		("can_add_tableheader_css_classes", "Can add TableHeader CSS classes"),
+	)
 
 
 @widgy.register
-class TableBody(InvisibleMixin, TableElement):
+class TableBody(InvisibleMixin, TableElement, CssContainerClasses):
     tag_name = 'tbody'
 
     draggable = False
@@ -430,10 +491,13 @@ class TableBody(InvisibleMixin, TableElement):
     class Meta:
         verbose_name = _('table body')
         verbose_name_plural = _('table bodies')
+	permissions = (
+		("can_add_tablebody_css_classes", "Can add TableBody CSS classes"),
+	)
 
 
 @widgy.register
-class Table(StrictDefaultChildrenMixin, TableElement):
+class Table(StrictDefaultChildrenMixin, TableElement, CssContainerClasses):
     tag_name = 'table'
     component_name = 'table'
 
@@ -461,11 +525,14 @@ class Table(StrictDefaultChildrenMixin, TableElement):
     class Meta:
         verbose_name = _('table')
         verbose_name_plural = _('tables')
+	permissions = (
+		("can_add_table_css_classes", "Can add Table CSS classes"),
+	)
 
 
 @widgy.register
 @python_2_unicode_compatible
-class Figure(StrDisplayNameMixin, Content):
+class Figure(StrDisplayNameMixin, Content, CssContainerClasses):
     editable = True
     accepting_children = True
     tooltip = _("A figure is a self-contained piece of content. It can be used"
@@ -483,6 +550,9 @@ class Figure(StrDisplayNameMixin, Content):
     class Meta:
         verbose_name = _('figure')
         verbose_name_plural = _('figures')
+	permissions = (
+		("can_add_figure_css_classes", "Can add Figure CSS classes"),
+	)
 
     def __str__(self):
         return self.title or ''
@@ -490,7 +560,7 @@ class Figure(StrDisplayNameMixin, Content):
 
 @widgy.register
 @python_2_unicode_compatible
-class Video(StrDisplayNameMixin, Content):
+class Video(StrDisplayNameMixin, Content, CssContainerClasses):
     video = VideoField(verbose_name=_('video'))
 
     editable = True
@@ -500,6 +570,9 @@ class Video(StrDisplayNameMixin, Content):
     class Meta:
         verbose_name = _('video')
         verbose_name_plural = _('videos')
+	permissions = (
+		("can_add_video_css_classes", "Can add Video CSS classes"),
+	)
 
     def __str__(self):
         return self.video
@@ -511,7 +584,7 @@ class ButtonForm(LinkFormMixin, forms.ModelForm):
 
 @widgy.register
 @python_2_unicode_compatible
-class Button(StrDisplayNameMixin, Content):
+class Button(StrDisplayNameMixin, Content, CssContainerClasses):
     text = models.CharField(max_length=255, verbose_name=_('text'), null=True, blank=True)
 
     link = LinkField(null=True)
@@ -526,6 +599,9 @@ class Button(StrDisplayNameMixin, Content):
     class Meta:
         verbose_name = _('button')
         verbose_name_plural = _('buttons')
+	permissions = (
+		("can_add_button_css_classes", "Can add Button CSS classes"),
+	)
 
     def __str__(self):
         if self.text is not None:
@@ -535,7 +611,7 @@ class Button(StrDisplayNameMixin, Content):
 
 @widgy.register
 @python_2_unicode_compatible
-class GoogleMap(StrDisplayNameMixin, Content):
+class GoogleMap(StrDisplayNameMixin, Content, CssContainerClasses):
     MAP_CHOICES = (
         ('roadmap', _('Road map')),
         ('satellite', _('Satellite')),
@@ -557,6 +633,9 @@ class GoogleMap(StrDisplayNameMixin, Content):
     class Meta:
         verbose_name = _('Google map')
         verbose_name_plural = _('Google maps')
+	permissions = (
+		("can_add_googlemap_css_classes", "Can add GoogleMap CSS classes"),
+	)
 
     def __str__(self):
         return truncatechars(self.address, 35)

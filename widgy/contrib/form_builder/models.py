@@ -28,10 +28,12 @@ from widgy.models import Content, Node
 from widgy.signals import pre_delete_widget
 from widgy.models.mixins import StrictDefaultChildrenMixin, DefaultChildrenMixin, TabbedContainer, StrDisplayNameMixin
 from widgy.utils import update_context, build_url, force_bytes, QuerySet
-from widgy.contrib.page_builder.models import Bucket, Html
+from widgy.contrib.page_builder.models import Bucket, Html, CssContainerClasses
 from widgy.contrib.page_builder.forms import MiniCKEditorField, CKEditorField
 from .forms import PhoneNumberField
 import widgy
+
+#from widgy.contrib.wi.models import CssContainerClasses
 
 
 class FormElement(Content):
@@ -73,7 +75,7 @@ class FormReponseHandler(FormSuccessHandler):
 
 
 @widgy.register
-class SaveDataHandler(FormSuccessHandler):
+class SaveDataHandler(FormSuccessHandler, CssContainerClasses):
     editable = False
     tooltip = _("Saves the data when the Form is filled out. This is enabled by"
                 " default.")
@@ -81,6 +83,9 @@ class SaveDataHandler(FormSuccessHandler):
     class Meta:
         verbose_name = _('save data handler')
         verbose_name_plural = _('save data handlers')
+	permissions = (
+		("can_add_save_data_handler_css_classes", "Can add Save Data Handler CSS classes"),
+	)
 
     def execute(self, request, form):
         FormSubmission.objects.submit(
@@ -152,7 +157,7 @@ class FieldMappingValueForm(forms.ModelForm):
 
 @widgy.register
 @python_2_unicode_compatible
-class FieldMappingValue(StrDisplayNameMixin, MappingValue):
+class FieldMappingValue(StrDisplayNameMixin, MappingValue, CssContainerClasses):
     """
     MappingValue that maps a form field to another value.
     """
@@ -164,6 +169,9 @@ class FieldMappingValue(StrDisplayNameMixin, MappingValue):
     class Meta:
         verbose_name = _('mapped field')
         verbose_name_plural = _('mapped field')
+	permissions = (
+		("can_add_mapped_field_css_classes", "Can add Mapped Field CSS classes"),
+	)
 
     def __str__(self):
         try:
@@ -195,7 +203,7 @@ class FieldMappingValue(StrDisplayNameMixin, MappingValue):
 
 
 @widgy.register
-class WebToLeadMapperHandler(RepostHandler):
+class WebToLeadMapperHandler(RepostHandler, CssContainerClasses):
     """
     Mapper which repost form data to SalesForce
     """
@@ -205,6 +213,9 @@ class WebToLeadMapperHandler(RepostHandler):
     class Meta:
         verbose_name = _('Salesforce Web-to-Lead')
         verbose_name_plural = _('Salesforce Web-to-Lead')
+	permissions = (
+		("can_add_salesforce_web_to_lead_css_classes", "Can add Salesforce Web-to-Lead CSS classes"),
+	)
 
     def get_mapping(self, request, form):
         mapping = super(WebToLeadMapperHandler, self).get_mapping(request, form)
@@ -272,7 +283,7 @@ class EmailSuccessHandlerBase(StrDisplayNameMixin, FormSuccessHandler):
 
 
 @widgy.register
-class EmailSuccessHandler(EmailSuccessHandlerBase):
+class EmailSuccessHandler(EmailSuccessHandlerBase, CssContainerClasses):
     to = models.EmailField(verbose_name=_('to'))
 
     tooltip = _("This widget can be used to send yourself an email when a form"
@@ -282,6 +293,9 @@ class EmailSuccessHandler(EmailSuccessHandlerBase):
     class Meta:
         verbose_name = _('admin success email')
         verbose_name_plural = _('admin success emails')
+	permissions = (
+		("can_add_admin_success_email_css_classes", "Can add Admin Success Email CSS classes"),
+	)
 
     def get_to_emails(self, form):
         if self.to:
@@ -305,7 +319,7 @@ class EmailUserHandlerForm(EmailSuccessHandlerBaseForm):
 
 
 @widgy.register
-class EmailUserHandler(EmailSuccessHandlerBase):
+class EmailUserHandler(EmailSuccessHandlerBase, CssContainerClasses):
     editable = True
     form = EmailUserHandlerForm
     tooltip = _("This widget can be used to send the user an email when they"
@@ -317,6 +331,9 @@ class EmailUserHandler(EmailSuccessHandlerBase):
     class Meta:
         verbose_name = _('user success email')
         verbose_name_plural = _('user success emails')
+	permissions = (
+		("can_add_user_success_email_css_classes", "Can add User Success Email CSS classes"),
+	)
 
     def get_to_emails(self, form):
         try:
@@ -341,7 +358,7 @@ class EmailUserHandler(EmailSuccessHandlerBase):
 
 @widgy.register
 @python_2_unicode_compatible
-class SubmitButton(StrDisplayNameMixin, FormElement):
+class SubmitButton(StrDisplayNameMixin, FormElement, CssContainerClasses):
     text = models.CharField(max_length=255, default=lambda: ugettext('submit'), verbose_name=_('text'))
 
     tooltip = _("The submit button for a form.")
@@ -353,6 +370,9 @@ class SubmitButton(StrDisplayNameMixin, FormElement):
     class Meta:
         verbose_name = _('submit button')
         verbose_name_plural = _('submit buttons')
+	permissions = (
+		("can_add_submit_button_css_classes", "Can add Submit Button CSS classes"),
+	)
 
     def __str__(self):
         return self.text
@@ -448,7 +468,7 @@ def friendly_uuid(uuid):
 
 @widgy.register
 @python_2_unicode_compatible
-class Form(TabbedContainer, StrDisplayNameMixin, StrictDefaultChildrenMixin, Content):
+class Form(TabbedContainer, StrDisplayNameMixin, StrictDefaultChildrenMixin, Content, CssContainerClasses):
     name = models.CharField(verbose_name=_('Name'),
                             max_length=255,
                             default=untitled_form,
@@ -478,6 +498,9 @@ class Form(TabbedContainer, StrDisplayNameMixin, StrictDefaultChildrenMixin, Con
     class Meta:
         verbose_name = _('form')
         verbose_name_plural = _('forms')
+	permissions = (
+		("can_add_form_css_classes", "Can add Form CSS classes"),
+	)
 
     def __str__(self):
         return self.name
@@ -702,7 +725,7 @@ class FormInputForm(FormFieldForm):
 
 
 @widgy.register
-class FormInput(FormField):
+class FormInput(FormField, CssContainerClasses):
     FORMFIELD_CLASSES = {
         'text': forms.CharField,
         'number': forms.IntegerField,
@@ -733,6 +756,9 @@ class FormInput(FormField):
     class Meta:
         verbose_name = _('form input')
         verbose_name_plural = _('form inputs')
+	permissions = (
+		("can_add_form_input_css_classes", "Can add Form Input CSS classes"),
+	)
 
     @property
     def widget_attrs(self):
@@ -755,7 +781,7 @@ class FormInput(FormField):
 
 
 @widgy.register
-class Textarea(FormField):
+class Textarea(FormField, CssContainerClasses):
     formfield_class = forms.CharField
 
     tooltip = _("Add this to your form to allow users to add large amounts of"
@@ -764,6 +790,9 @@ class Textarea(FormField):
     class Meta:
         verbose_name = _('text area')
         verbose_name_plural = _('text areas')
+	permissions = (
+		("can_add_text_area_css_classes", "Can add Text Area CSS classes"),
+	)
 
     @property
     def widget(self):
@@ -791,7 +820,7 @@ class BaseChoiceField(FormField):
 
 
 @widgy.register
-class ChoiceField(BaseChoiceField):
+class ChoiceField(BaseChoiceField, CssContainerClasses):
     WIDGET_CLASSES = {
         'select': forms.Select,
         'radios': forms.RadioSelect,
@@ -819,10 +848,16 @@ class ChoiceField(BaseChoiceField):
     @property
     def widget_class(self):
         return self.WIDGET_CLASSES.get(self.type, forms.Select)
+    class Meta:
+	verbose_name = _('choice field')
+	verbose_name_plural = _('choice fields')
+	permissions = (
+		("can_add_choice_field_css_classes", "Can add Choice Field CSS classes"),
+	)
 
 
 @widgy.register
-class MultipleChoiceField(BaseChoiceField):
+class MultipleChoiceField(BaseChoiceField, CssContainerClasses):
     WIDGET_CLASSES = {
         'checkboxes': forms.CheckboxSelectMultiple,
         'select': forms.SelectMultiple,
@@ -860,10 +895,18 @@ class MultipleChoiceField(BaseChoiceField):
     @property
     def widget_class(self):
         return self.WIDGET_CLASSES.get(self.type, forms.CheckboxSelectMultiple)
+      
+    class Meta:
+	verbose_name = _('multiple choice field')
+	verbose_name_plural = _('multiple choice fields')
+	permissions = (
+		("can_add_multiple_choice_field_css_classes", "Can add Multiple Choice Field CSS classes"),
+	)
+
 
 
 @widgy.register
-class Uncaptcha(BaseFormField):
+class Uncaptcha(BaseFormField, CssContainerClasses):
     editable = False
     formfield_class = forms.CharField
 
@@ -898,6 +941,9 @@ class Uncaptcha(BaseFormField):
     class Meta:
         verbose_name = _('uncaptcha')
         verbose_name_plural = _('uncaptchas')
+	permissions = (
+		("can_add_uncaptcha_css_classes", "Can add Uncaptcha CSS classes"),
+	)
 
 
 @widgy.register
