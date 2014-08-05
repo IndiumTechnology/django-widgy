@@ -2,16 +2,16 @@
 
 li.node,
 li.shelfItem {
-  @include node-icon-sprite("form_builder.choicefield", "widget-radio");
-  @include node-icon-sprite("form_builder.emailsuccesshandler", "widget-email");
-  @include node-icon-sprite("form_builder.emailuserhandler", "widget-email");
-  @include node-icon-sprite("form_builder.form", "widget-form");
-  @include node-icon-sprite("form_builder.forminput", "widget-form");
-  @include node-icon-sprite("form_builder.multiplechoicefield", "widget-checkbox");
-  @include node-icon-sprite("form_builder.savedatahandler", "widget-save-data");
-  @include node-icon-sprite("form_builder.submitbutton", "widget-button");
-  @include node-icon-sprite("form_builder.textarea", "widget-textarea");
-  @include node-icon-sprite("form_builder.uncaptcha", "widget-hidden-field");
-  @include node-icon-sprite("form_builder.webtoleadmapperhandler", "widget-salesforce");
-  @include node-icon-sprite("form_builder.fieldmappingvalue", "widget-icon-mapped-field");
+  @include node-icon("form_builder.choicefield", "/static/widgy/image/widget-radio.png");
+  @include node-icon("form_builder.emailsuccesshandler", "/static/widgy/image/widget-email.gif");
+  @include node-icon("form_builder.emailuserhandler", "/static/widgy/image/widget-email.gif");
+  @include node-icon("form_builder.form", "/static/widgy/image/widget-form.gif");
+  @include node-icon("form_builder.forminput", "/static/widgy/image/widget-form.gif");
+  @include node-icon("form_builder.multiplechoicefield", "/static/widgy/image/widget-checkbox.png");
+  @include node-icon("form_builder.savedatahandler", "/static/widgy/image/widget-save-data.png");
+  @include node-icon("form_builder.submitbutton", "/static/widgy/image/widget-button.png");
+  @include node-icon("form_builder.textarea", "/static/widgy/image/widget-textarea.gif");
+  @include node-icon("form_builder.uncaptcha", "/static/widgy/image/widget-hidden-field.png");
+  @include node-icon("form_builder.webtoleadmapperhandler", "/static/widgy/image/widget-salesforce.png");
+  @include node-icon("form_builder.fieldmappingvalue", "/static/widgy/image/widget-icon-mapped-field.png");
 }

@@ -87,4 +87,7 @@
       float: left;
     }
   }
+  .form_builder.tabbed > .widget > .current {
+    float: none;
+  }
 }
