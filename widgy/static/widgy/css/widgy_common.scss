@@ -215,9 +215,8 @@ $widget_icon_sprite: sprite-map("widgy/image/widget-*");
 }
 
 @mixin node-icon ($class, $img) {
-  &.#{$class} > span.title {
+  &.#{$class} > span.title:before {
     background-image: url($img);
-    background-repeat:no-repeat;
   }
 }
 

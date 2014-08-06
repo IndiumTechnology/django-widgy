@@ -6,7 +6,7 @@
     > .widget > .nodeChildren {
       @include box-sizing(border-box);
       @include clearfix;
-      width: 100% !important;
+      width: 100%;
 
       > li {
         display: inline-block;
