@@ -85,7 +85,7 @@ def i18nreverse(language, *args, **kwargs):
 
 @links.register
 class WidgetPage(WidgyPageMixin, Page):
-	permanent_id = models.CharField(max_length=255, default="", verbose_name="permanent id")
+	permanent_id = models.CharField(max_length=255, default="", verbose_name=_("permanent id"))
 
 	root_node = VersionedWidgyField(
 	    site=settings.WIDGY_MEZZANINE_SITE,
