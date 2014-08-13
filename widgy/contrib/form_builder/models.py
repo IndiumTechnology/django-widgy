@@ -291,8 +291,8 @@ class EmailSuccessHandler(EmailSuccessHandlerBase, CssContainerClasses):
                 " email.")
 
     class Meta:
-        verbose_name = _('admin success email')
-        verbose_name_plural = _('admin success emails')
+        verbose_name = _('success email for admin')
+        verbose_name_plural = _('success emails for admin')
 	permissions = (
 		("can_add_admin_success_email_css_classes", "Can add Admin Success Email CSS classes"),
 	)
@@ -308,7 +308,7 @@ EmailSuccessHandler._meta.get_field('include_form_data').default = True
 
 
 class EmailUserHandlerForm(EmailSuccessHandlerBaseForm):
-    to_ident = forms.ChoiceField(label=_('To'), choices=[])
+    to_ident = forms.ChoiceField(label=_('To ident'), choices=[])
 
     class Meta:
         fields = ('to_ident', 'subject', 'content', 'include_form_data')
@@ -329,8 +329,8 @@ class EmailUserHandler(EmailSuccessHandlerBase, CssContainerClasses):
     to_ident = models.CharField(_('to ident'), max_length=36)
 
     class Meta:
-        verbose_name = _('user success email')
-        verbose_name_plural = _('user success emails')
+        verbose_name = _('success email for user')
+        verbose_name_plural = _('success emails for user')
 	permissions = (
 		("can_add_user_success_email_css_classes", "Can add User Success Email CSS classes"),
 	)
