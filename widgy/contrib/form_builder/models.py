@@ -284,7 +284,7 @@ class EmailSuccessHandlerBase(StrDisplayNameMixin, FormSuccessHandler):
 
 @widgy.register
 class EmailSuccessHandler(EmailSuccessHandlerBase, CssContainerClasses):
-    to = models.EmailField(verbose_name=_('to'))
+    to = models.EmailField(verbose_name=_('email to'))
 
     tooltip = _("This widget can be used to send yourself an email when a form"
                 " has been filled out. You can customize the body of the"
@@ -326,7 +326,7 @@ class EmailUserHandler(EmailSuccessHandlerBase, CssContainerClasses):
                 " fill out a form. You can customize the body of the email.")
 
     # an input in our form
-    to_ident = models.CharField(_('to'), max_length=36)
+    to_ident = models.CharField(_('to ident'), max_length=36)
 
     class Meta:
         verbose_name = _('user success email')
