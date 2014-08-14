@@ -26,7 +26,7 @@ class CssContainerClasses(models.Model):
 		abstract = True			
 		app_label = "widgy_indium"
 
-	container_classes = models.CharField(max_length=255, blank=True, null=True, help_text=_("A list of CSS classes, separated by space."))
+	container_classes = models.CharField(max_length=255, blank=True, null=True, verbose_name=_("container classes"), help_text=_("A list of CSS classes, separated by space."))
 
 
 class Layout(StrictDefaultChildrenMixin, Content):
