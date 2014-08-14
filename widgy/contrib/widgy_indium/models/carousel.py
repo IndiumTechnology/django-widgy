@@ -67,7 +67,7 @@ class Carousel(StrDisplayNameMixin, Content, CssContainerClasses):
 			('circular', _('Circular')),)
 
 	ORIENTATIONS = ((False, _('Horizontal')),
-			(True, _('Vetical')),)
+			(True, _('Vertical')),)
 
 	animation_duration =	models.PositiveIntegerField(default=400, help_text=_("The duration in milliseconds."), verbose_name=_("animation duration"))
 	animation_easing = 		models.CharField(max_length=10, choices=AN_EASINGS, default="linear", verbose_name=_("animation easing"))
