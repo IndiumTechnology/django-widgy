@@ -1,6 +1,7 @@
 {% load i18n %}
 <div class="widget{% if self.draggable %} draggable{% endif %}">
   {% block drag-row %}
+  {# <button class="clone_from_first"><span>{% trans "Clone" %}</span></button> #}
   <p class="drag-row">
     {% if self.draggable %}
     <span class="drag_handle dragHandle icon-move"></span>
@@ -9,7 +10,6 @@
     {% block title %}
     <span class="title">{% trans self.display_name|capfirst %}</span>
     {% endblock %}
-    
     {% if self.deletable %}
     <button class="delete"><i class="icon-remove"></i> <span>{% trans "Delete" %}</span></button>
     {% endif %}

@@ -125,12 +125,12 @@
 {% endblock %}
 
 {% block content %}
-<section class="main">
+<section class="main clearfix">
 {#  <h1>{{ widgy.owner }}</h1>#}
   {% render self.get_children.0 %}
 </section>
 
-<section class="sidebar">
+<section class="sidebar clearfix">
   {% render self.get_children.1 %}
 </section>
 {% endblock %}
