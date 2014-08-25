@@ -1,0 +1,30 @@
+{% load widgy_tags i18n blog_tags %}
+
+{% get_available_languages as LANGUAGES %}
+
+{% with lang_count=LANGUAGES|length %}
+
+
+<ul class="{% if self.container_classes %} {{ self.container_classes }} {% endif %}">
+	{% blog_recent_posts self.post_count as posts %}
+	{% for post in posts %}
+	    <li class="post">
+	    	<header>
+			    <a href="{% if lang_count > 1 %}/{{ request.LANGUAGE_CODE }}{% endif %}{{ post.get_absolute_url }}">
+			    	<h3>
+			    		{{ post.title }}
+		    		</h3>
+	    	    </a>
+			    <div>
+					<span>{% trans "by" %} {{ post.user }} </span>
+					<time datetime="{{ post.publish_date|date:'c' }}" pubdate>{{ post.publish_date|date:"d" }} {{ post.publish_date|date:"F" }} {{ post.publish_date|date:"Y" }}</time>
+		    	</div>
+			</header>
+    		<article>
+				{{ post.description_from_content|striptags|truncatechars:100|safe }}
+			</article>
+	    </li>
+	{% endfor %}
+</ul>
+{% endwith %}
+
