@@ -1,0 +1,107 @@
+{% load compress widgy_tags i18n %}
+
+{% compress js  %}
+	<script type="text/javascript">
+	String.prototype.trunc =
+    	function(n,useWordBoundary){
+        	var toLong = this.length>n,
+            	s_ = toLong ? this.substr(0,n-1) : this;
+        		s_ = useWordBoundary && toLong ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
+        	return  toLong ? [s_ + '&hellip;', true] : [s_, false];
+		};
+
+		function GCalEvents(gcal_json_url) {
+			// Get list of upcoming iCal events formatted in JSON
+			jQuery.getJSON(gcal_json_url, function(data){
+
+				// Parse and render each event
+				jQuery.each(data.feed.entry, function(i, item){
+					if(i == 0) {
+						jQuery(".calendar-events-{{ self.id }} .gcal-events li").first().hide();
+					};
+					
+					// event title
+					var event_title = item.title.$t;
+					var event_url = item.link[0].href;
+					// event contents
+					var event_contents = jQuery.trim(item.content.$t);
+					// make each separate line a new list item
+					//event_contents = event_contents.split(/\n/g);
+
+					// event start date/time
+					var event_start_date = moment(item.gd$when[0].startTime);
+
+					// if event has a start time (as oppose to all day), format date with time
+					if(event_start_date.hour() != 0 || event_start_date.minute() != 0) {
+						var event_start_str = "{% trans "At" %} " + event_start_date.format("HH:mm D. MMMM YYYY");
+					} 
+					else {
+						// otherwise format start as date only (without time)
+						var event_start_str = event_start_date.format("D. MMMM YYYY");                
+					};
+					
+					var trunc_event_contents = event_contents.trunc(150, true);
+					if(trunc_event_contents[1]) {
+						trunc_event_contents = trunc_event_contents[0] + " <a href=\"" + event_url + "\"  target=\"_blank\">" + "{% trans "Read more"  %}" + ".</a>";
+					}
+					else {
+						trunc_event_contents = trunc_event_contents[0];
+					}
+
+					// Render the event
+					jQuery(".calendar-events-{{ self.id }} .gcal-events li").last().before(
+						"<li>" 
+							+ "<a href=\"" + event_url + "\"  target=\"_blank\"><h2>" + event_title + "</h2></a>"
+							+ "<div class=\"content_all\" style=\"display:none;\">" + event_contents + "</div>"
+							+ "<footer>" + event_start_str + "</footer>"
+						+ "</li>"
+					);
+				});
+			});
+		}
+		jQuery(document).ready( function() {
+		
+			GCalEvents("{{ self.calendar_url }}?orderby=starttime&sortorder=ascending&max-results={{ self.event_count }}&futureevents=true&singleevents=true&alt=json");
+
+			jQuery(".calendar-events-{{ self.id }} .gcal-events").on("click", " li a", function(e) {
+				var event = jQuery(this).parent("li");
+				jQuery('.events-widget-modal.modal .modal-header .modal-title ').html(jQuery(event).find("a h2").html());
+				
+				var body_text = "<span class=\"date\">"
+					+ jQuery(event).find("footer").html()
+					+ "</span><br /><br />"
+					+ jQuery(event).find("div.content_all").html()
+					+ "<br /><br /> <a href=\""
+					+ jQuery(event).find("a").attr("href")
+					+ "\" target=\"_blank\">Google Calendar URL</a><a href=\"/"
+					+ "{{ request.LANGUAGE_CODE }}"
+					+ "/tapahtumat\" style=\"float:right;\">"
+					+ "{% trans "See more events!" %}" + "</a>";
+				jQuery('.events-widget-modal.modal .modal-body p ').html(body_text);
+
+				jQuery('.events-widget-modal.modal').modal({});
+				e.preventDefault();
+			});
+		});    
+	</script>
+{% endcompress %}
+<div class="calendar-events calendar-events-{{ self.id }} {% if self.container_classes %} {{ self.container_classes }} {% endif %}">
+	<ul class="gcal-events">
+		<li class="no-gcal-events">{% trans "No events listed" %}</li>
+	</ul>
+	<div class="events-widget-modal modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3 class="modal-title">{% trans "Modal title" %}</h3>
+				</div>
+				<div class="modal-body">
+					<p>{% trans "One fine body…" %}</p>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+</div>
+
+

@@ -1,0 +1,137 @@
+{% load compress widgy_tags i18n %}
+
+{% compress js  %}
+	<script type='text/javascript'>
+		$(document).ready(function() {
+				$('.calendar-{{ self.title|slugify }}').fullCalendar({
+				eventSources: [
+					'{{ self.calendar_url }}'
+				],
+				header: {% if self.show_header %}{
+						left:  	'{{ self.header_left }}',
+						center: '{{ self.header_center }}',
+						right:  '{{ self.header_right }}'
+						}{% else %}false{% endif %},
+				firstDay: {{ self.first_day }},
+				weekNumbers: {% if self.show_week_number %}true{% else %}false{% endif %},
+				buttonText: {
+						prev:     '{% trans "Prev" %}',//'&lsaquo;', // <
+						next:     '{% trans "Next" %}',//'&rsaquo;', // >
+						prevYear: '{% trans "Prev year" %}',//'&laquo;',  // <<
+						nextYear: '{% trans "Next year" %}',//'&raquo;',  // >>
+				    	today:    "{% trans "today" %}",
+				    	month:    "{% trans "month" %}",
+				    	week:     "{% trans "week" %}",
+				    	day:      "{% trans "day" %}"
+				},
+				monthNames: [
+					"{% trans "January" %}", 
+					"{% trans "February" %}", 
+					"{% trans "March" %}", 
+					"{% trans "April" %}", 
+					"{% trans "May" %}", 
+					"{% trans "June" %}", 
+					"{% trans "July" %}",
+					"{% trans "August" %}", 
+					"{% trans "September" %}", 
+					"{% trans "October" %}", 
+					"{% trans "November" %}", 
+					"{% trans "December" %}"
+				],
+				monthNamesShort: [
+					"{% trans "Jan" %}", 
+					"{% trans "Feb" %}", 
+					"{% trans "Mar" %}", 
+					"{% trans "Apr" %}", 
+					"{% trans "May" %}", 
+					"{% trans "Jun" %}",
+					"{% trans "Jul" %}", 
+					"{% trans "Aug" %}", 
+					"{% trans "Sep" %}", 
+					"{% trans "Oct" %}", 
+					"{% trans "Nov" %}", 
+					"{% trans "Dec" %}"
+				],
+				dayNames: [
+					"{% trans "Sunday" %}", 
+					"{% trans "Monday" %}", 
+					"{% trans "Tuesday" %}", 
+					"{% trans "Wednesday" %}",
+					"{% trans "Thursday" %}", 
+					"{% trans "Friday" %}", 
+					"{% trans "Saturday" %}"
+				],
+				dayNamesShort: [
+					"{% trans "Sun" %}", 
+					"{% trans "Mon" %}", 
+					"{% trans "Tue" %}", 
+					"{% trans "Wed" %}", 
+					"{% trans "Thu" %}", 
+					"{% trans "Fri" %}", 
+					"{% trans "Sat" %}"
+				],
+				weekNumberTitle: "{% trans "Week" %}",
+				timeFormat: {
+						agenda: '{{ self.agenda_time_format }}',
+						'':		'{{ self.time_format }}'
+				},
+				columnFormat: {
+						month: '{{ self.column_format_month }}',
+						week: '{{ self.column_format_week }}',
+						day: '{{ self.column_format_day }}'
+				},
+				eventBackgroundColor: '{{ self.event_background_color }}',
+				eventBorderColor: '{{ self.event_border_color }}',
+				eventTextColor: '{{ self.event_text_color }}',
+				eventLimit: 3,
+				eventClick: function(event) {
+						if (event.url) {
+							$('.calendar-widget-modal.modal .modal-header .modal-title ').html(event.title);
+							var event_date = "";
+							var event_start = moment(event.start._d);
+							var event_end = moment(event.end._d);
+							if(event.allDay) {
+								if(event_start.isSame(event_end)) {
+									event_date = event_start.format("DD. MMMM YYYY");
+								}
+								else {
+									event_date = event_start.format("DD. MMMM YYYY") + " - " + event_end.format("DD. MMMM YYYY");
+								}
+							}
+							else {
+								if(event_start.isSame(event_end, 'day')) {
+									event_date = "{% trans "At" %} " + event_start.format(" HH:mm") + " - " + event_end.format("HH:mm DD. MMMM YYYY");
+								}
+								else {
+									event_date ="{% trans "At" %} " + event_start.format(" HH:mm") + " - " + event_end.format("HH:mm DD. MMMM YYYY");
+								}
+							}
+
+							var body_text = "<span class=\"date\">" + event_date + "</span><br /><br />" + event.description + "<br /><br /> <a href=\"" + event.url + "\">Google Calendar URL";
+							$('.calendar-widget-modal.modal .modal-body p ').html(body_text);
+							$('.calendar-widget-modal.modal').modal({});
+							return false;
+						}
+					},
+			});
+		});
+	</script>
+{% endcompress %}
+<div class="calendar-widget-modal modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h3 class="modal-title">Modal title</h3>
+			</div>
+			<div class="modal-body">
+				<p>One fine body…</p>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="calendar {% if self.container_classes %} {{ self.container_classes }} {% endif %}">
+	<div class="calendar-{{ self.title|slugify }}">
+	</div>
+</div>

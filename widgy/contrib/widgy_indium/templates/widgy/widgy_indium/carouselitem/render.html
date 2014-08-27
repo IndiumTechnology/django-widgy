@@ -1,7 +1,9 @@
-{% load compress widgy_tags %}
+{% load compress widgy_tags thumbnail_libs %}
 <li class="carousel-child" style="
 			{% if self.background_image %}
-				background-image:url('{{ self.background_image.url }}');
+			{% easy_thumbnail self.background_image.file "1920x1080" upscale=False crop="scale"  as im %}
+
+				background-image:url('{{ im.url }}');
 				background-size: cover;
 				background-position: center center;
 			{% endif %}
