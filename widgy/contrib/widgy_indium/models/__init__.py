@@ -4,3 +4,4 @@ from widgy.contrib.widgy_indium.models.calendar import Calendar, CalendarEvents
 from widgy.contrib.widgy_indium.models.carousel import Carousel, CarouselItem
 from widgy.contrib.widgy_indium.models.container import Container
 from widgy.contrib.widgy_indium.models.blog import BlogPostList
+from widgy.contrib.widgy_indium.models.products import ProductsViewer, NewestProducts
