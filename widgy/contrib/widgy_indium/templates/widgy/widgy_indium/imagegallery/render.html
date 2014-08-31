@@ -1,0 +1,102 @@
+{% load i18n compress thumbnail_libs %}
+
+{% compress js  %}
+    <script type="text/javascript">
+        jQuery(document).ready( function() {
+	
+			function createModal(event) {
+
+                jQuery('.imagegallery .modal .modal-header .modal-title ').html(jQuery(event).find(".item-modal-title").text());
+                
+				jQuery('.imagegallery .modal .modal-header .modal-full-img').html(
+					"<a href=\"" + jQuery(event).find(".item-modal-url").text() + "\" target=\"_blank\">{% trans "See full image" %} </a>"
+					);
+
+				var body_text = "<img class=\"item-modal-url\" src=\"" + jQuery(event).find(".item-modal-url").html() 
+					+ "\" alt=\"" + jQuery(event).find(".item-modal-title").text() + "\" />"
+					+ jQuery(event).find(".item-modal-body").html();
+                jQuery('.imagegallery .modal .modal-body').html(body_text);
+
+				if (jQuery(event)[0].previousElementSibling != null) {
+					jQuery('.imagegallery .modal .modal-body .left').attr("alt", jQuery(event)[0].previousElementSibling.className);
+				}
+				else {
+					jQuery('.imagegallery .modal .modal-body .left').attr("alt", jQuery(event)[0].parentElement.lastElementChild.className);
+				}
+				if (jQuery(event)[0].nextElementSibling != null) {
+					jQuery('.imagegallery .modal .modal-body .right').attr("alt", jQuery(event)[0].nextElementSibling.className);
+				}
+				else {
+					jQuery('.imagegallery .modal .modal-body .right').attr("alt", jQuery(event)[0].parentElement.firstElementChild.className);
+				}
+
+				jQuery('.imagegallery .modal').modal({});
+			}
+
+            jQuery(".imagegallery-{{ self.id }} .gallery-image").on("click", "a", function(e) {
+
+				createModal(jQuery(this).parent(".gallery-image"));
+                e.preventDefault();
+            });
+
+			jQuery('.imagegallery .modal .modal-body').on("click", "a.left", function(e) {
+				//jQuery('.imagegallery .modal').modal('toggle');
+				prev_e = jQuery(this).attr("alt");
+				createModal("."+prev_e.replace(/\s/g,"."));
+				//jQuery(prev_e.replace(" ",".")).find("a").click();
+				e.preventDefault();
+			});
+			jQuery('.imagegallery .modal .modal-body').on("click", "a.right", function(e) {
+				//jQuery('.imagegallery .modal').modal('toggle');
+				next_e = jQuery(this).attr("alt");
+				createModal("."+next_e.replace(/\s/g,"."));
+				//jQuery(next_e.replace(" ",".")).find("a").click();
+				e.preventDefault();
+			});
+        });    
+    </script>
+{% endcompress %}
+
+<!-- Add modal with arrows to next and prevoius. -->
+
+<div class="imagegallery imagegallery-{{ self.id  }} {% if self.container_classes %} {{ self.container_classes }} {% endif %}">
+	<div class="images">
+	    {% for child in self.folder.files %}
+		<div class="gallery-image col-xs-4 col-md-3 image-{{ forloop.counter0 }}" style="padding:0;margin:0;">
+			{% easy_thumbnail child.image.file 400x400 upscale=True crop=True  as im %}
+			<a href="#"><img src="{{ im.url }}" alt="{{ child.image.label }}" width="400" height="400" /></a>
+			<div class="item-modal-url" style="display:none;">{{ child.image.url }}</div>
+			<div class="item-modal-title" style="display:none;">{{ child.image.label }}</div>
+			<div class="item-modal-body" style="display:none;">
+				{% if child.image.description %}
+					<p>{{ child.image.description }}</p>
+				{% endif %}
+				<a href="#left" class="left" style="position:absolute;left:0;top:0;height:100%;width:50%;"><span style="
+						top: 40%;
+						font-size: 2em;
+						color: #eaebd9;" class="glyphicon glyphicon-chevron-left"></span></a>
+				<a href="#right" class="right" style="position:absolute;right:0;top:0;height:100%;width:50%;"><span style="float:right;
+						top: 40%;
+						font-size: 2em;
+						color: #eaebd9;" class="glyphicon glyphicon-chevron-right"></span></a>
+			</div>
+			{#	{% render child %}#}
+		</div>
+	    {% endfor %}
+	</div>
+	<div class="imagegallery-modal modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="modal-title">{% trans "Modal title" %}</h3>
+					<span class="modal-full-img"></span>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans "One fine body…" %}</p>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>
+
