@@ -24,7 +24,6 @@ import widgy
 class CssContainerClasses(models.Model):
 	class Meta:
 		abstract = True			
-		app_label = "widgy_indium"
 
 	container_classes = models.CharField(max_length=255, blank=True, null=True, verbose_name=_("container classes"), help_text=_("A list of CSS classes, separated by space."))
 
@@ -115,7 +114,7 @@ class Markdown(Content, CssContainerClasses):
         verbose_name = _('markdown')
         verbose_name_plural = _('markdowns')
 	permissions = (
-		("can_add_markdown_css_classes", "Can add Markdown CSS classes"),
+	    ("can_add_markdown_css_classes", "Can add Markdown CSS classes"),
 	)
 
 
@@ -137,7 +136,7 @@ class Html(Content, CssContainerClasses):
         verbose_name = _('HTML')
         verbose_name_plural = _('HTML editors')
 	permissions = (
-		("can_add_html_css_classes", "Can add HTML CSS classes"),
+	    ("can_add_html_css_classes", "Can add HTML CSS classes"),
 	)
 
 
@@ -154,7 +153,7 @@ class UnsafeHtml(Content, CssContainerClasses):
         verbose_name = _('unsafe HTML')
         verbose_name_plural = _('unsafe HTML editors')
 	permissions = (
-		("can_add_unsafehtml_css_classes", "Can add UnsafeHTML CSS classes"),
+	    ("can_add_unsafehtml_css_classes", "Can add UnsafeHTML CSS classes"),
 	)
 
 
@@ -171,7 +170,7 @@ class CalloutBucket(Bucket, CssContainerClasses):
         verbose_name = _('callout bucket')
         verbose_name_plural = _('callout buckets')
 	permissions = (
-		("can_add_callout_bucket_css_classes", "Can add Callout Bucket CSS classes"),
+	    ("can_add_callout_bucket_css_classes", "Can add Callout Bucket CSS classes"),
 	)
 
 
@@ -211,7 +210,7 @@ class CalloutWidget(StrDisplayNameMixin, Content, CssContainerClasses):
         verbose_name = _('callout widget')
         verbose_name_plural = _('callout widgets')
 	permissions = (
-		("can_add_calloutwidget_css_classes", "Can add CalloutWidget CSS classes"),
+	    ("can_add_calloutwidget_css_classes", "Can add CalloutWidget CSS classes"),
 	)
 
     def __str__(self):
@@ -239,7 +238,7 @@ class Accordion(DefaultChildrenMixin, Bucket, CssContainerClasses):
         verbose_name = _('accordion')
         verbose_name_plural = _('accordions')
 	permissions = (
-		("can_add_accordion_css_classes", "Can add Accordion CSS classes"),
+	    ("can_add_accordion_css_classes", "Can add Accordion CSS classes"),
 	)
 
     @property
@@ -268,8 +267,8 @@ class Tabs(TabbedContainer, Accordion):
         verbose_name = _('tabs')
         verbose_name_plural = _('tabs')
 	permissions = (
-		("can_add_tabs_css_classes", "Can add Tabs CSS classes"),
-	)
+	    ("can_add_tabs_css_classes", "Can add Tabs CSS classes"),
+	)	
 
 
 @widgy.register
@@ -291,7 +290,7 @@ class Section(StrDisplayNameMixin, Content, CssContainerClasses):
         verbose_name = _('section')
         verbose_name_plural = _('sections')
 	permissions = (
-		("can_add_section_css_classes", "Can add Section CSS classes"),
+	    ("can_add_section_css_classes", "Can add Section CSS classes"),
 	)
 
     def __str__(self):
@@ -316,7 +315,7 @@ class Image(Content, CssContainerClasses):
         verbose_name = _('image')
         verbose_name_plural = _('images')
 	permissions = (
-		("can_add_image_css_classes", "Can add Image CSS classes"),
+	    ("can_add_image_css_classes", "Can add Image CSS classes"),
 	)
 
 
@@ -360,7 +359,7 @@ class TableRow(TableElement, CssContainerClasses):
         verbose_name = _('row')
         verbose_name_plural = _('rows')
 	permissions = (
-		("can_add_tablerow_css_classes", "Can add TableRow CSS classes"),
+	    ("can_add_tablerow_css_classes", "Can add TableRow CSS classes"),
 	)
 
 
@@ -376,7 +375,7 @@ class TableHeaderData(TableElement, CssContainerClasses):
     class Meta:
         verbose_name = 'column'
 	permissions = (
-		("can_add_column_css_classes", "Can add Column CSS classes"),
+	    ("can_add_column_css_classes", "Can add Column CSS classes"),
 	)
 
     @classmethod
@@ -449,7 +448,7 @@ class TableData(TableElement, CssContainerClasses):
         verbose_name = _('cell')
         verbose_name_plural = _('cells')
 	permissions = (
-		("can_add_cell_css_classes", "Can add Cell CSS classes"),
+	    ("can_add_cell_css_classes", "Can add Cell CSS classes"),
 	)
 
 
@@ -476,7 +475,7 @@ class TableHeader(TableElement, CssContainerClasses):
         verbose_name = _('table header')
         verbose_name_plural = _('table headers')
 	permissions = (
-		("can_add_tableheader_css_classes", "Can add TableHeader CSS classes"),
+	    ("can_add_tableheader_css_classes", "Can add TableHeader CSS classes"),
 	)
 
 
@@ -504,7 +503,7 @@ class TableBody(InvisibleMixin, TableElement, CssContainerClasses):
         verbose_name = _('table body')
         verbose_name_plural = _('table bodies')
 	permissions = (
-		("can_add_tablebody_css_classes", "Can add TableBody CSS classes"),
+	    ("can_add_tablebody_css_classes", "Can add TableBody CSS classes"),
 	)
 
 
@@ -538,7 +537,7 @@ class Table(StrictDefaultChildrenMixin, TableElement, CssContainerClasses):
         verbose_name = _('table')
         verbose_name_plural = _('tables')
 	permissions = (
-		("can_add_table_css_classes", "Can add Table CSS classes"),
+	    ("can_add_table_css_classes", "Can add Table CSS classes"),
 	)
 
 
@@ -563,7 +562,7 @@ class Figure(StrDisplayNameMixin, Content, CssContainerClasses):
         verbose_name = _('figure')
         verbose_name_plural = _('figures')
 	permissions = (
-		("can_add_figure_css_classes", "Can add Figure CSS classes"),
+	    ("can_add_figure_css_classes", "Can add Figure CSS classes"),
 	)
 
     def __str__(self):
@@ -583,7 +582,7 @@ class Video(StrDisplayNameMixin, Content, CssContainerClasses):
         verbose_name = _('video')
         verbose_name_plural = _('videos')
 	permissions = (
-		("can_add_video_css_classes", "Can add Video CSS classes"),
+	    ("can_add_video_css_classes", "Can add Video CSS classes"),
 	)
 
     def __str__(self):
@@ -612,7 +611,7 @@ class Button(StrDisplayNameMixin, Content, CssContainerClasses):
         verbose_name = _('button')
         verbose_name_plural = _('buttons')
 	permissions = (
-		("can_add_button_css_classes", "Can add Button CSS classes"),
+	    ("can_add_button_css_classes", "Can add Button CSS classes"),
 	)
 
     def __str__(self):
@@ -645,8 +644,8 @@ class GoogleMap(StrDisplayNameMixin, Content, CssContainerClasses):
     class Meta:
         verbose_name = _('Google map')
         verbose_name_plural = _('Google maps')
-	permissions = (
-		("can_add_googlemap_css_classes", "Can add GoogleMap CSS classes"),
+        permissions = (
+	    ("can_add_googlemap_css_classes", "Can add GoogleMap CSS classes"),
 	)
 
     def __str__(self):

@@ -1,6 +1,11 @@
 Widgy: Tree Editor for Django
 =============================
 
+This is a fork, please consider using original repository 
+(https://github.com/fusionbox/django-widgy), if you need their newest updates.
+This fork has some changes to original code and some new widgets.
+
+
 .. image:: https://travis-ci.org/fusionbox/django-widgy.png?branch=master
    :target: http://travis-ci.org/fusionbox/django-widgy
    :alt: Build Status

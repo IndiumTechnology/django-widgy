@@ -8,101 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'MainContentArea'
-        db.create_table(u'widgy_indium_maincontentarea', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('language_code', self.gf('django.db.models.fields.CharField')(default=u'fi', max_length=2)),
-        ))
-        db.send_create_signal('widgy_indium', ['MainContentArea'])
-
-        # Adding model 'SidebarArea'
-        db.create_table(u'widgy_indium_sidebararea', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('language_code', self.gf('django.db.models.fields.CharField')(default=u'fi', max_length=2)),
-        ))
-        db.send_create_signal('widgy_indium', ['SidebarArea'])
-
-        # Adding model 'IndiumDefaultLayout'
-        db.create_table(u'widgy_indium_indiumdefaultlayout', (
-            (u'i18nlayout_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['widgy_i18n.I18NLayout'], unique=True, primary_key=True)),
-        ))
-        db.send_create_signal('widgy_indium', ['IndiumDefaultLayout'])
-
-        # Adding model 'LayoutContainer'
-        db.create_table(u'widgy_indium_layoutcontainer', (
-            (u'i18nlayoutcontainer_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['widgy_i18n.I18NLayoutContainer'], unique=True, primary_key=True)),
-        ))
-        db.send_create_signal('widgy_indium', ['LayoutContainer'])
-
-        # Adding model 'WidgetPage'
-        db.create_table(u'widgy_indium_widgetpage', (
-            (u'page_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['pages.Page'], unique=True, primary_key=True)),
-            ('permanent_id', self.gf('django.db.models.fields.CharField')(default='', max_length=255)),
-            ('root_node', self.gf('widgy.db.fields.VersionedWidgyField')(to=orm['widgy.VersionTracker'], null=True, on_delete=models.SET_NULL)),
-        ))
-        db.send_create_signal('widgy_indium', ['WidgetPage'])
-
-        # Adding model 'Carousel'
-        db.create_table(u'widgy_indium_carousel', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('container_classes', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(default='', max_length=255, null=True, blank=True)),
-            ('delay', self.gf('django.db.models.fields.PositiveIntegerField')(default=2000)),
-            ('auto_scroll', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('pause_scroll_on_hover', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('pagination', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('controls', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('animation_duration', self.gf('django.db.models.fields.PositiveIntegerField')(default=400)),
-            ('animation_easing', self.gf('django.db.models.fields.CharField')(default='linear', max_length=10)),
-            ('wrap_mode', self.gf('django.db.models.fields.CharField')(default='circular', max_length=10)),
-            ('orientation', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('visible_slides_at_time', self.gf('django.db.models.fields.PositiveIntegerField')(default=1)),
-        ))
-        db.send_create_signal('widgy_indium', ['Carousel'])
-
-        # Adding model 'CarouselItem'
-        db.create_table(u'widgy_indium_carouselitem', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('container_classes', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(default='', max_length=255, null=True, blank=True)),
-            ('background_image', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='+', null=True, on_delete=models.PROTECT, to=orm['filer.File'])),
-            ('background_color', self.gf('django.db.models.fields.CharField')(default='', max_length=255, null=True, blank=True)),
-        ))
-        db.send_create_signal('widgy_indium', ['CarouselItem'])
-
-        # Adding model 'Container'
-        db.create_table(u'widgy_indium_container', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('container_classes', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(default='', max_length=255, null=True, blank=True)),
-        ))
-        db.send_create_signal('widgy_indium', ['Container'])
+        # Adding field 'ImageGallery.folder'
+        db.add_column(u'widgy_indium_imagegallery', 'folder',
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['filer.Folder'], null=True),
+                      keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting model 'MainContentArea'
-        db.delete_table(u'widgy_indium_maincontentarea')
-
-        # Deleting model 'SidebarArea'
-        db.delete_table(u'widgy_indium_sidebararea')
-
-        # Deleting model 'IndiumDefaultLayout'
-        db.delete_table(u'widgy_indium_indiumdefaultlayout')
-
-        # Deleting model 'LayoutContainer'
-        db.delete_table(u'widgy_indium_layoutcontainer')
-
-        # Deleting model 'WidgetPage'
-        db.delete_table(u'widgy_indium_widgetpage')
-
-        # Deleting model 'Carousel'
-        db.delete_table(u'widgy_indium_carousel')
-
-        # Deleting model 'CarouselItem'
-        db.delete_table(u'widgy_indium_carouselitem')
-
-        # Deleting model 'Container'
-        db.delete_table(u'widgy_indium_container')
+        # Deleting field 'ImageGallery.folder'
+        db.delete_column(u'widgy_indium_imagegallery', 'folder_id')
 
 
     models = {
@@ -163,14 +77,14 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('name',)", 'unique_together': "(('parent', 'name'),)", 'object_name': 'Folder'},
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
+            u'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
+            u'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'filer_owned_folders'", 'null': 'True', 'to': u"orm['auth.User']"}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': "orm['filer.Folder']"}),
-            'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
+            u'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
+            u'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'uploaded_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         },
         u'pages.page': {
@@ -227,7 +141,7 @@ class Migration(SchemaMigration):
             'message': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['widgy.VersionCommit']", 'null': 'True', 'on_delete': 'models.PROTECT'}),
             'publish_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'root_node': ('widgy.db.fields.WidgyField', [], {'to': "orm['widgy.Node']", 'null': 'True', 'on_delete': 'models.PROTECT'}),
+            'root_node': ('widgy.db.fields.WidgyField', [], {'to': "orm['widgy.Node']", 'on_delete': 'models.PROTECT'}),
             'tracker': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'commits'", 'to': "orm['widgy.VersionTracker']"})
         },
         'widgy.versiontracker': {
@@ -243,6 +157,41 @@ class Migration(SchemaMigration):
         },
         u'widgy_i18n.i18nlayoutcontainer': {
             'Meta': {'object_name': 'I18NLayoutContainer'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+        },
+        'widgy_indium.blogpostlist': {
+            'Meta': {'object_name': 'BlogPostList'},
+            'container_classes': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'post_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '5'}),
+            'title': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '255', 'null': 'True', 'blank': 'True'})
+        },
+        'widgy_indium.calendar': {
+            'Meta': {'object_name': 'Calendar'},
+            'agenda_time_format': ('django.db.models.fields.CharField', [], {'default': "'H:mm{ - H:mm}'", 'max_length': '50'}),
+            'calendar_url': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
+            'column_format_day': ('django.db.models.fields.CharField', [], {'default': "'dddd dd.MM.'", 'max_length': '50'}),
+            'column_format_month': ('django.db.models.fields.CharField', [], {'default': "'ddd'", 'max_length': '50'}),
+            'column_format_week': ('django.db.models.fields.CharField', [], {'default': "'ddd dd.MM.'", 'max_length': '50'}),
+            'container_classes': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'event_background_color': ('django.db.models.fields.CharField', [], {'default': "'rgba(255,255,255,0.2)'", 'max_length': '50'}),
+            'event_border_color': ('django.db.models.fields.CharField', [], {'default': "'#ddd'", 'max_length': '50'}),
+            'event_text_color': ('django.db.models.fields.CharField', [], {'default': "'#333'", 'max_length': '50'}),
+            'first_day': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1'}),
+            'header_center': ('django.db.models.fields.CharField', [], {'default': "'month,agendaWeek,agendaDay'", 'max_length': '100'}),
+            'header_left': ('django.db.models.fields.CharField', [], {'default': "'title'", 'max_length': '100'}),
+            'header_right': ('django.db.models.fields.CharField', [], {'default': "'today prev,next prevYear,nextYear'", 'max_length': '100'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'show_header': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'show_week_number': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'time_format': ('django.db.models.fields.CharField', [], {'default': "'H:mm'", 'max_length': '50'}),
+            'title': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '255'})
+        },
+        'widgy_indium.calendarevents': {
+            'Meta': {'object_name': 'CalendarEvents'},
+            'calendar_url': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
+            'container_classes': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'event_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '3'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'widgy_indium.carousel': {
@@ -275,6 +224,12 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '255', 'null': 'True', 'blank': 'True'})
         },
+        'widgy_indium.imagegallery': {
+            'Meta': {'object_name': 'ImageGallery'},
+            'container_classes': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'folder': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['filer.Folder']", 'null': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+        },
         'widgy_indium.indiumdefaultlayout': {
             'Meta': {'object_name': 'IndiumDefaultLayout', '_ormbases': [u'widgy_i18n.I18NLayout']},
             u'i18nlayout_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['widgy_i18n.I18NLayout']", 'unique': 'True', 'primary_key': 'True'})
@@ -288,6 +243,17 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'language_code': ('django.db.models.fields.CharField', [], {'default': "u'fi'", 'max_length': '2'})
         },
+        'widgy_indium.newestproducts': {
+            'Meta': {'object_name': 'NewestProducts'},
+            'container_classes': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'product_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '6'})
+        },
+        'widgy_indium.productsviewer': {
+            'Meta': {'object_name': 'ProductsViewer'},
+            'container_classes': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+        },
         'widgy_indium.sidebararea': {
             'Meta': {'object_name': 'SidebarArea'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -295,9 +261,15 @@ class Migration(SchemaMigration):
         },
         'widgy_indium.widgetpage': {
             'Meta': {'ordering': "(u'_order',)", 'object_name': 'WidgetPage', '_ormbases': [u'pages.Page']},
+            '_meta_title_en': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            '_meta_title_fi': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'description_en': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'description_fi': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             u'page_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['pages.Page']", 'unique': 'True', 'primary_key': 'True'}),
             'permanent_id': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '255'}),
-            'root_node': ('widgy.db.fields.VersionedWidgyField', [], {'to': "orm['widgy.VersionTracker']", 'null': 'True', 'on_delete': 'models.SET_NULL'})
+            'root_node': ('widgy.db.fields.VersionedWidgyField', [], {'to': "orm['widgy.VersionTracker']", 'null': 'True', 'on_delete': 'models.SET_NULL'}),
+            'title_en': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'title_fi': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'})
         }
     }
 

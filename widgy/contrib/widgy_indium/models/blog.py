@@ -29,7 +29,7 @@ class BlogPostList(StrDisplayNameMixin, Content, CssContainerClasses):
 		verbose_name = _('blog post list')
 		verbose_name_plural = _('blog post lists')
                 permissions = (
-                        ("can_add_blog post_list_css_classes", "Can add blog post list CSS classes"),
+                        ("can_add_blog_post_list_css_classes", "Can add blog post list CSS classes"),
                 )
 		
 		app_label = "widgy_indium"

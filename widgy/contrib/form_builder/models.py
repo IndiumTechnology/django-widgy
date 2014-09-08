@@ -33,8 +33,6 @@ from widgy.contrib.page_builder.forms import MiniCKEditorField, CKEditorField
 from .forms import PhoneNumberField
 import widgy
 
-#from widgy.contrib.wi.models import CssContainerClasses
-
 
 class FormElement(Content):
     editable = True
