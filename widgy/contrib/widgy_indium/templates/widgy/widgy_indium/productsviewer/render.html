@@ -26,68 +26,82 @@
 
 {% all_products as categories %}
 
-<div class="product-list-all{% if self.container_classes %} {{ self.container_classes }} {% endif %}">
+<div class="product-list-all tabify {% if self.container_classes %} {{ self.container_classes }} {% endif %}">
+
+	<ul class="tabs nav nav-tabs title tabs-categories" role="tablist">
+		{% for category in categories %}
+			<li>
+				<a href="#{{ category|slugify }}"{% if forloop.first %} class="clearfix active"{% endif %}>
+					<h1>{{ category }}</h1>
+				</a>
+			</li>
+		{% endfor %}
+	</ul>
+
 	{% for category, subcategories in categories.iteritems %}
-	<div class="product-category">
-		<div class="title clearfix">
-			<h1 class="col-xs-9">{{ category }}</h1>
+	<div id="{{ category|slugify }}" class="tabContent{% if forloop.first %} active{% endif %}">
+		<div class="product-category">
+			{% comment %}
+			<div class="title clearfix">
+				<h1 class="col-xs-9">{{ category }}</h1>
 
-			{% if category == "Beverages" or category == "Juomat" %}
-				<div class="guideline clearfix col-xs-3">
-					<img src="{% static "images/draught-beer.png" %}" width="100" height="100" />
-					<span>{% trans "Draught beverage" %}</span>
-				</div>
-			{% endif %}
-		</div>
-		<div class="tabify data tabify-{{ category }}">
-			<ul class="tabs nav nav-tabs" role="tablist">
-				{% for subcategory in subcategories %}
-					<li><a href="#{{ subcategory|slugify }}"{% if forloop.first %} class="active"{% endif %}>{{ subcategory }}</a></li>
-				{% endfor %}
-			</ul>
-			
-			{% for subcategory, countries in subcategories.iteritems %}
-				<div id="{{ subcategory|slugify }}" class="tabContent{% if forloop.first %} active{% endif %}">
-					<div class="product-list product-list-{{ self.id }} clearfix">
-						{% for country, products in countries.iteritems %}
-							{% if category == "Beverages" or category == "Juomat" %}
-								<h3 class="product-country">{% if country %}{{ country }}{% else %}{% trans "Other" %}{% endif %}</h3>
-							{% endif %}
-							{% for product in products %}
-								<div class="product-item col-xs-4 col-sm-2">
-									{% easy_thumbnail product.image.file "600x600" upscale crop=True  as im %}
-									<a href="#" class="product-img" title="{{ product.title }}">
-										<img src="{{ im.url }}" alt="{{ product.title }}" width="600" height="600" class="img-responsive" />
-										<h4 class="product-title">{{ product.title }}</h4>
-										{% if product.draught %}
-											<span class="product-draught"><img src="{% static "images/draught-beer.png" %}" width="100" height="100" /></span>
-										{% endif %}
-									</a>
-									<div class="item-modal-title" style="display:none;">{{ product.title }}</div>
-									<div class="item-modal-body" style="display:none;">
-										<p>
-											{% if product.country or product.price %}
-												{% if product.country and product.country != "ZZ" %}
-													{% trans "Country" %}: {{ product.get_country_display }} 
-												{% endif %}
-												{% if product.price %}
-													{% trans "Price" %}: {{ product.price }} 
-												{% endif %}
-												<br /> <br />
-											{% endif %}
-
-											{{ product.description }}
-										</p>
-										{% if product.draught %}
-											<span class="product-draught"><img src="{% static "images/draught-beer.png" %}" width="100" height="100" /></span>
-										{% endif %}
-									</div>
-								</div>
-							{% endfor %}
-						{% endfor %}
+				{% if category == "Beverages" or category == "Juomat" %}
+					<div class="guideline clearfix col-xs-3">
+						<img src="{% static "images/draught-beer.png" %}" width="100" height="100" />
+						<span>{% trans "Draught beverage" %}</span>
 					</div>
-				</div>
-			{% endfor %}
+				{% endif %}
+			</div>{% endcomment %}
+			<div class="tabify data tabify-{{ category }}">
+				<ul class="tabs nav nav-tabs" role="tablist">
+					{% for subcategory in subcategories %}
+						<li><a href="#{{ subcategory|slugify }}"{% if forloop.first %} class="active"{% endif %}>{{ subcategory }}</a></li>
+					{% endfor %}
+				</ul>
+				
+				{% for subcategory, countries in subcategories.iteritems %}
+					<div id="{{ subcategory|slugify }}" class="tabContent{% if forloop.first %} active{% endif %}">
+						<div class="product-list product-list-{{ self.id }} clearfix">
+							{% for country, products in countries.iteritems %}
+								{% if category == "Beverages" or category == "Juomat" %}
+									<h3 class="product-country">{% if country %}{{ country }}{% else %}{% trans "Other" %}{% endif %}</h3>
+								{% endif %}
+								{% for product in products %}
+									<div class="product-item col-xs-6 col-sm-2">
+										{% easy_thumbnail product.image.file "600x600" upscale crop=True  as im %}
+										<a href="#" class="product-img" title="{{ product.title }}">
+											<img src="{{ im.url }}" alt="{{ product.title }}" width="600" height="600" class="img-responsive" />
+											<h4 class="product-title">{{ product.title }}</h4>
+											{% if product.draught %}
+												<span class="product-draught"><img src="{% static "images/draught-beer.png" %}" width="100" height="100" /></span>
+											{% endif %}
+										</a>
+										<div class="item-modal-title" style="display:none;">{{ product.title }}</div>
+										<div class="item-modal-body" style="display:none;">
+											<p>
+												{% if product.country or product.price %}
+													{% if product.country and product.country != "ZZ" %}
+														{% trans "Country" %}: {{ product.get_country_display }} 
+													{% endif %}
+													{% if product.price %}
+														{% trans "Price" %}: {{ product.price }} 
+													{% endif %}
+													<br /> <br />
+												{% endif %}
+
+												{{ product.description }}
+											</p>
+											{% if product.draught %}
+												<span class="product-draught"><img src="{% static "images/draught-beer.png" %}" width="100" height="100" /></span>
+											{% endif %}
+										</div>
+									</div>
+								{% endfor %}
+							{% endfor %}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
 		</div>
 	</div>
 	{% endfor %}

@@ -39,6 +39,7 @@ class Migration(SchemaMigration):
             ('event_count', self.gf('django.db.models.fields.PositiveIntegerField')(default=3)),
         ))
         db.send_create_signal('widgy_indium', ['CalendarEvents'])
+        
         # Adding model 'NewestProducts'
         db.create_table(u'widgy_indium_newestproducts', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -46,7 +47,7 @@ class Migration(SchemaMigration):
             ('product_count', self.gf('django.db.models.fields.PositiveIntegerField')(default=6)),
         ))
         db.send_create_signal('widgy_indium', ['NewestProducts'])
-
+        
         # Adding model 'ProductsViewer'
         db.create_table(u'widgy_indium_productsviewer', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -54,6 +55,7 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('widgy_indium', ['ProductsViewer'])
         # Adding model 'BlogPostList'
+        
         db.create_table(u'widgy_indium_blogpostlist', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('container_classes', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
@@ -91,6 +93,7 @@ class Migration(SchemaMigration):
         db.add_column(u'widgy_indium_widgetpage', 'description_en',
                       self.gf('django.db.models.fields.TextField')(null=True, blank=True),
                       keep_default=False)
+        
 
     def backwards(self, orm):
         # Deleting model 'Calendar'
