@@ -27,16 +27,16 @@
 {% recent_products self.product_count as products %}
 <div class="product-list product-list-newest product-list-{{ self.id }} clearfix {% if self.container_classes %} {{ self.container_classes }} {% endif %}">
 	{% for product in products %}
-	    <div class="product-item col-xs-6 col-sm-4">
+	    <div class="product-item product-item-{{ forloop.counter }} col-xs-6 col-sm-3">
 			{% easy_thumbnail product.image.file "600x600" upscale crop=True  as im %}
-			<a href="#" class="product-img" title="{{ product.title }}">
-				<img src="{{ im.url }}" alt="{{ product.title }}" width="600" height="600" class="img-responsive" />
-				<h3 class="product-title">{{ product.title }}</h3>
+			<a href="#" class="product-img" title="{{ product.title|safe }}">
+				<img src="{{ im.url }}" alt="{{ product.title|safe }}" width="600" height="600" class="img-responsive" />
+				<h3 class="product-title">{{ product.title|safe }}</h3>
 				{% if product.draught %}
 					<span class="product-draught"><img src="{% static "images/draught-beer.png" %}" width="100" height="100" /></span>
 				{% endif %}
 			</a>
-			<div class="item-modal-title" style="display:none;">{{ product.title }}</div>
+			<div class="item-modal-title" style="display:none;">{{ product.title|safe }}</div>
 			<div class="item-modal-body" style="display:none;">
 				<p>
 					{% if product.country or product.price %}
@@ -44,12 +44,12 @@
 							{% trans "Country" %}: {{ product.get_country_display }} 
 						{% endif %}
 						{% if product.price %}
-							{% trans "Price" %}: {{ product.price }} 
+							{% trans "Price" %}: {{ product.price|safe }} 
 						{% endif %}
 						<br /> <br />
 					{% endif %}
 
-					{{ product.description }}
+					{{ product.description|safe }}
 				</p>
 				{% if product.draught %}
 					<span class="product-draught"><img src="{% static "images/draught-beer.png" %}" width="100" height="100" /></span>

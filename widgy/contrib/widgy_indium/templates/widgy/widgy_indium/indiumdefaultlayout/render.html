@@ -4,7 +4,7 @@
 
 {% block extra_css %}
 	{% if self.get_children.0|find_node_of_type:"calendar" or self.get_children.1|find_node_of_type:"calendar" %}
-		<link rel="stylesheet" href="{% static "css/fullcalendar/2.1.0/fullcalendar.css" %}">
+		<link rel="stylesheet" href="{% static "css/fullcalendar/2.2.2/fullcalendar.css" %}">
 		{#<link rel="stylesheet" href="{% static "css/fullcalendar/2.1.0/fullcalendar.print.css" %}">#}
 	{% endif %}
     {% if self.get_children.0|find_node_of_type:"carousel" or self.get_children.1|find_node_of_type:"carousel" %}
@@ -120,11 +120,16 @@
 
 {% block extra_js %}
 	{% if self.get_children.0|find_node_of_type:"calendar" or self.get_children.1|find_node_of_type:"calendar" %}
-		<script src="{% static "js/fullcalendar/2.1.0/moment.min.js" %}"></script>
-		<script src="{% static "js/fullcalendar/2.1.0/fullcalendar.js" %}"></script>
-		<script src="{% static "js/fullcalendar/2.1.0/gcal.js" %}"></script>
+		<script src="{% static "js/fullcalendar/2.2.2/moment.min.js" %}"></script>
+		<script src="{% static "js/fullcalendar/2.2.2/fullcalendar.js" %}"></script>
+        {% if LANGUAGE_CODE == "en" %}
+            <script src="{% static "js/fullcalendar/2.2.2/lang/en-gb.js" %}"></script>
+        {% else %}
+            <script src="{% static "js/fullcalendar/2.2.2/lang/"|add_str:LANGUAGE_CODE|add_str:".js" %}"></script>
+        {% endif %}
+		<script src="{% static "js/fullcalendar/2.2.2/gcal.js" %}"></script>
 	{% elif self.get_children.0|find_node_of_type:"calendar events" or self.get_children.1|find_node_of_type:"calendar events" %}
-		<script src="{% static "js/fullcalendar/2.1.0/moment.min.js" %}"></script>
+		<script src="{% static "js/fullcalendar/2.2.2/moment.min.js" %}"></script>
 		<script>
 			$(document).ready(function() {
 				function translate(number, withoutSuffix, key, isFuture) {
@@ -217,7 +222,7 @@
 {% endblock %}
 
 {% block meta_title %}
-{{ widgy.owner }}
+{{ widgy.owner.title }}
 {% endblock %}
 
 {% block content %}

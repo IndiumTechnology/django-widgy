@@ -1,5 +1,4 @@
 {% load compress widgy_tags i18n %}
-
 {% compress js  %}
 	<script type="text/javascript">
 	String.prototype.trunc =
@@ -10,34 +9,39 @@
         	return  toLong ? [s_ + '&hellip;', true] : [s_, false];
 		};
 
-		function GCalEvents(gcal_json_url) {
+		//function GCalEvents(gcal_json_url) {
+		function GCalEvents(items) {
 			// Get list of upcoming iCal events formatted in JSON
-			jQuery.getJSON(gcal_json_url, function(data){
-
+			//jQuery.getJSON(gcal_json_url, function(data){
+                moment.locale('{{ LANGUAGE_CODE }}');
 				// Parse and render each event
-				jQuery.each(data.feed.entry, function(i, item){
+				//jQuery.each(data.feed.entry, function(i, item){
+				jQuery.each(items, function(i, item){
 					if(i == 0) {
 						jQuery(".calendar-events-{{ self.id }} .gcal-events li").first().hide();
 					};
-					
+				    console.log(item);	
 					// event title
-					var event_title = item.title.$t;
-					var event_url = item.link[0].href;
+					//var event_title = item.title.$t;
+                    var event_title = item["summary"];
+					//var event_url = item.link[0].href;
+                    var event_url = item["htmlLink"];
+
 					// event contents
-					var event_contents = jQuery.trim(item.content.$t);
+					var event_contents = jQuery.trim(item["description"]);
 					// make each separate line a new list item
 					//event_contents = event_contents.split(/\n/g);
 
 					// event start date/time
-					var event_start_date = moment(item.gd$when[0].startTime);
+					var event_start_date = item["start"];
 
 					// if event has a start time (as oppose to all day), format date with time
-					if(event_start_date.hour() != 0 || event_start_date.minute() != 0) {
-						var event_start_str = "{% trans "At" %} " + event_start_date.format("HH:mm D. MMMM YYYY");
+					if(event_start_date["dateTime"]) {
+						var event_start_str = "{% trans "At" %} " + moment(event_start_date["dateTime"]).format("HH:mm D. MMMM YYYY");
 					} 
 					else {
 						// otherwise format start as date only (without time)
-						var event_start_str = event_start_date.format("D. MMMM YYYY");                
+						var event_start_str = moment(event_start_date["date"]).format("D. MMMM YYYY");                
 					};
 					
 					var trunc_event_contents = event_contents.trunc(150, true);
@@ -57,11 +61,28 @@
 						+ "</li>"
 					);
 				});
-			});
+			//});
 		}
+        function init() {
+            gapi.client.setApiKey("AIzaSyAVQZKCgVBpKrMa_65OVOvpY41lW2Jmtoo");
+            var now = moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+            console.log(now); 
+            var restRequest = gapi.client.request({
+              'path': '/calendar/v3/calendars/thirstyscholar.fi_j76qda3dtljqne9ibmqgk1nvd4@group.calendar.google.com/events',
+              'params': {'maxResults': '{{ self.event_count }}', 'orderBy': 'startTime', 'singleEvents': true, 'timeMin': now}
+            });
+
+            restRequest.then(function(resp) {
+              console.log(resp.result.items);
+              GCalEvents(resp.result.items);
+            }, function(reason) {
+              console.log('Error: ' + reason.result.error.message);
+            });
+        }    
 		jQuery(document).ready( function() {
-		
-			GCalEvents("{{ self.calendar_url }}?orderby=starttime&sortorder=ascending&max-results={{ self.event_count }}&futureevents=true&singleevents=true&alt=json");
+
+			//GCalEvents("{{ self.calendar_url }}?orderby=starttime&sortorder=ascending&max-results={{ self.event_count }}&futureevents=true&singleevents=true&alt=json");
+            
 
 			jQuery(".calendar-events-{{ self.id }} .gcal-events").on("click", " li a", function(e) {
 				var event = jQuery(this).parent("li");
@@ -85,6 +106,8 @@
 		});    
 	</script>
 {% endcompress %}
+<script src="https://apis.google.com/js/client.js?onload=init"></script>
+
 <div class="calendar-events calendar-events-{{ self.id }} {% if self.container_classes %} {{ self.container_classes }} {% endif %}">
 	<ul class="gcal-events">
 		<li class="no-gcal-events">{% trans "No events listed" %}</li>

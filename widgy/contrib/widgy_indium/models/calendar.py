@@ -84,8 +84,8 @@ class CalendarEvents(Content, CssContainerClasses):
 
     def save(self, *args, **kw):
 
-        if self.calendar_url.endswith("basic"):
-            self.calendar_url = self.calendar_url[:len(self.calendar_url)-5] + "full"
+        #if self.calendar_url.endswith("basic"):
+        #    self.calendar_url = self.calendar_url[:len(self.calendar_url)-5] + "full"
 
         super(CalendarEvents, self).save(*args, **kw) 
 

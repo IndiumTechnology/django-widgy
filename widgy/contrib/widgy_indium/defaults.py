@@ -40,3 +40,31 @@ register_setting(
     editable=True,
     default="",
 )
+
+register_setting(
+    name="FOOTER_OPENING_HOURS_ROW_1",
+    description=_("The opening hours are shown in the footer of page."),
+    editable=True,
+    default="",
+)
+
+register_setting(
+    name="FOOTER_OPENING_HOURS_ROW_2",
+    description=_("The opening hours are shown in the footer of page."),
+    editable=True,
+    default="",
+)
+
+register_setting(
+    name="FOOTER_OPENING_HOURS_ROW_3",
+    description=_("The opening hours are shown in the footer of page."),
+    editable=True,
+    default="",
+)
+
+register_setting(
+    name="FOOTER_OPENING_HOURS_ROW_4",
+    description=_("The opening hours are shown in the footer of page."),
+    editable=True,
+    default="",
+)
