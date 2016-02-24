@@ -8,10 +8,16 @@
                 var event = jQuery(this).parent(".product-item");
 
                 jQuery('.product-list-all .modal .modal-header .modal-title ').html(jQuery(event).find(".item-modal-title").text());
-                
+               {% comment %} 
 				jQuery('.product-list-all .modal .modal-body').css({
 					"background-image": "url(" + jQuery(event).find("a.product-img img").attr("src")  + ")",
 					});
+                {% endcomment %}
+                jQuery('.product-list-newest .modal .modal-body').css({
+                    "background-image": "url(" + jQuery(event).find("a.product-img img").attr("src")  + ")",
+                    "background-position": "center",
+                    "background-repeat": "no-repeat",
+                });
 
 				var body_text = ""
 					+ jQuery(event).find(".item-modal-body").html();
@@ -68,9 +74,11 @@
 								{% endif %}
 								{% for product in products %}
 									<div class="product-item col-xs-6 col-sm-2">
-										{% easy_thumbnail product.image.file "600x600" upscale crop=True  as im %}
+                                        {% easy_thumbnail product.image.file "260x550" upscale crop=True as im %}
+                                        {% easy_thumbnail product.image.file "600x600" upscale=False crop=False as imorig %}
 										<a href="#" class="product-img" title="{{ product.title|safe }}">
 											<img src="{{ im.url }}" alt="{{ product.title|safe }}" width="600" height="600" class="img-responsive" />
+                                            <img src="{{ imorig.url }}" class="original" style="display:none;" />
 											<h4 class="product-title">{{ product.title|safe }}</h4>
 											{% if product.draught %}
 												<span class="product-draught"><img src="{% static "images/draught-beer.png" %}" width="100" height="100" /></span>
@@ -107,7 +115,7 @@
 	{% endfor %}
 	<div class="product-modal modal fade">
 		<div class="modal-dialog">
-			<div class="modal-content">
+			<div class="modal-content" style="background-color:white;">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 					<h3 class="modal-title">{% trans "Modal title" %}</h3>
